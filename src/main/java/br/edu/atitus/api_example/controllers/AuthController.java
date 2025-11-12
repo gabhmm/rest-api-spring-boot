@@ -6,17 +6,19 @@ import br.edu.atitus.api_example.entities.UserEntity;
 import br.edu.atitus.api_example.services.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService service = new UserService();
+    //AuthController DEPENDE de um objeto UserService
+    private final UserService service;
 
+    public AuthController(UserService service) {
+        super();
+        this.service = service;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<UserEntity> postSignup(@RequestBody SignupDTO dto) throws Exception {
@@ -27,5 +29,10 @@ public class AuthController {
 
         service.save(user);
         return ResponseEntity.status(201).body(user);
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> execptionHandler(Exception e) {
+        String message = e.getMessage().replaceAll("\r\n","");
+        return ResponseEntity.badRequest().body(message);
     }
 }
