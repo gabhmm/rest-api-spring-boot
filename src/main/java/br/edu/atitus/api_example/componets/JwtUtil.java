@@ -9,7 +9,7 @@ import io.jsonwebtoken.security.Keys;
 
 public class JwtUtil {
 
-		private static final String SECRET_KEY="chavesecretaSaudeFacil";
+		private static final String SECRET_KEY="chavesecretaSaudeFacilOJoaoEUmLindao39x";
 		private static final long EXPIRATION_TIME =1000*60*60*24;
 		
 		private static SecretKey getSecretKey() {

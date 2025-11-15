@@ -43,7 +43,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<String> signin(@RequestBody SigninDTO dto) throws AuthenticationException, Exception {
     	authConfig.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(dto.email(), dto.password()));
-    	String jwt=JwtUtil.generatetoken(dto.email());
+    	String jwt = JwtUtil.generatetoken(dto.email());
     	return ResponseEntity.ok(jwt);
     }
     
