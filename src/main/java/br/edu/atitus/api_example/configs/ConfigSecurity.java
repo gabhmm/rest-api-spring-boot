@@ -1,7 +1,7 @@
 package br.edu.atitus.api_example.configs;
 
 
-import com.sun.jdi.event.ExceptionEvent;
+import br.edu.atitus.api_example.componets.AuthTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,14 +18,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ConfigSecurity {
 
     @Bean
-    SecurityFilterChain getSecurityFilter(HttpSecurity http) throws Exception {
+    SecurityFilterChain getSecurityFilter(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
         http.
                 sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers("/ws**,","/ws/**").authenticated().anyRequest().permitAll());
+                .requestMatchers("/ws**,","/ws/**").authenticated().anyRequest().permitAll())
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
