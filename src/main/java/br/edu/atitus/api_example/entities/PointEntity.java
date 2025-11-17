@@ -22,7 +22,7 @@ public class PointEntity {
     private double longitude;
 
     @JoinColumn(name = "iduser")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private UserEntity user;
 
     public UUID getId() {
