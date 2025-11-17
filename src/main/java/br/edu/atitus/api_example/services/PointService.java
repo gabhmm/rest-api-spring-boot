@@ -1,6 +1,7 @@
 package br.edu.atitus.api_example.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,7 +52,7 @@ public class PointService {
 		repository.deleteById(id);
 	}
 	
-	public List<PointEntity> findAll() {
-		return repository.findAll();
+	public Optional<PointEntity> findById(UUID id) {
+		return repository.findById(id);
 	}
 }

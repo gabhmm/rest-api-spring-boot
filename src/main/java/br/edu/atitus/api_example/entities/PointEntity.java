@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_point")
-public class PointEntity {
+public class PointEntity  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.atitus.api_example.dtos.PointDTO;
 import br.edu.atitus.api_example.entities.PointEntity;
 import br.edu.atitus.api_example.services.PointService;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 @RestController
 @RequestMapping("/ws/point")
@@ -30,8 +34,12 @@ public class PointController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PointEntity>> findAll() {
-		var lista = service.findAll();
+	public ResponseEntity<List<PointEntity>> findById() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        UUID userId = userDetails.getId(); // Método que retorna o ID do User
+
+        List<Point> points = pointRepository.findByUserId(userId);
 		return ResponseEntity.ok(lista);
 	}
 	
