@@ -26,7 +26,10 @@ public class PointService {
 	public PointEntity save(PointEntity point) throws Exception {
 		if (point ==null)
 				throw new Exception("Objeto nulo");
-		
+
+		if(point.getName()==null||point.getName().isEmpty())
+			throw new Exception("Nome invalido");
+			
 		if (point.getDescription()==null||point.getDescription().isEmpty())
 			throw new Exception("Descrição invalida");
 		
@@ -35,6 +38,9 @@ public class PointService {
 		
 		if (point.getLongitude()<=-180||point.getLongitude()>180)
 			throw new Exception("Latitude inválida");
+		
+		if (point.getOpenHour().isAfter(point.getCloseHour()))
+			throw new Exception("Horário inválido");
 		
 		UserEntity userAuth = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -60,14 +66,36 @@ public class PointService {
 		if (!pointInBD.getUser().getId().equals(userAuth.getId()))
 			throw new Exception("Você não tem permissão para essa ação");
 		
-	    if (updatedPoint.description() != null)
+		if (updatedPoint.name() == null||updatedPoint.name().isBlank()) {
+			throw new Exception("Nome invalido");
+		}else {
+			pointInBD.setName(updatedPoint.name());
+		}
+		
+	    if (updatedPoint.description() == null||updatedPoint.description().isBlank()) {
+	    	throw new Exception("Descrição inválida");
+	    }else {
 	        pointInBD.setDescription(updatedPoint.description());
+	    }
 	    
-	    if (updatedPoint.latitude() >= -90 && updatedPoint.latitude() <= 90)
+	    if (updatedPoint.latitude() <= -90 || updatedPoint.latitude() >= 90) {
+	    	throw new Exception("Latitude inválida");
+	    }else {
 	        pointInBD.setLatitude(updatedPoint.latitude());
+	    }
 	    
-	    if (updatedPoint.longitude() >= -180 && updatedPoint.longitude() <= 180)
+	    if (updatedPoint.longitude() <= -180 || updatedPoint.longitude() >= 180) {
+	    	throw new Exception("Longitude inválida");
+	    }else {
 	        pointInBD.setLongitude(updatedPoint.longitude());
+	    }
+	    
+	    if (updatedPoint.openHour().isAfter(updatedPoint.closeHour())) {
+	    	throw new Exception("Horário inválido");
+	    }else {
+	    	pointInBD.setOpenHour(updatedPoint.openHour());
+	    	pointInBD.setCloseHour(updatedPoint.closeHour());
+	    }
 	    
 	    repository.save(pointInBD);
 	    

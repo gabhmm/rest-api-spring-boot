@@ -2,6 +2,7 @@ package br.edu.atitus.api_example.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -11,7 +12,10 @@ public class PointEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
+    
+    @Column (length = 250,nullable = false)
+    private String name;
+    
     @Column(length = 250,nullable = false)
     private String description;
 
@@ -20,6 +24,12 @@ public class PointEntity  {
 
     @Column(columnDefinition = "decimal(17,14)",nullable = false)
     private double longitude;
+    
+    @Column(nullable = false)
+    private LocalTime openHour;
+    
+    @Column(nullable = false)
+    private LocalTime closeHour;
 
     @JoinColumn(name = "iduser")
     @ManyToOne
@@ -33,7 +43,15 @@ public class PointEntity  {
         this.id = id;
     }
 
-    public String getDescription() {
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
         return description;
     }
 
@@ -56,8 +74,24 @@ public class PointEntity  {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+    
+    public LocalTime getOpenHour() {
+		return openHour;
+	}
 
-    public UserEntity getUser() {
+	public void setOpenHour(LocalTime openHour) {
+		this.openHour = openHour;
+	}
+
+	public LocalTime getCloseHour() {
+		return closeHour;
+	}
+
+	public void setCloseHour(LocalTime closeHour) {
+		this.closeHour = closeHour;
+	}
+
+	public UserEntity getUser() {
         return user;
     }
 
