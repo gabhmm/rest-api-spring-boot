@@ -51,8 +51,11 @@ public class PointService {
 		
 		repository.deleteById(id);
 	}
-	
-	public Optional<PointEntity> findById(UUID id) {
-		return repository.findById(id);
+
+    public List<PointEntity> findUser() {
+        UserEntity userAuth = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return repository.findByUser(userAuth);
 	}
+
+
 }

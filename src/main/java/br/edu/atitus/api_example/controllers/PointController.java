@@ -3,6 +3,7 @@ package br.edu.atitus.api_example.controllers;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,16 +33,15 @@ public class PointController {
 		super();
 		this.service = service;
 	}
-	
-	@GetMapping
-	public ResponseEntity<List<PointEntity>> findById() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        UUID userId = userDetails.getId(); // Método que retorna o ID do User
 
-        List<Point> points = pointRepository.findByUserId(userId);
-		return ResponseEntity.ok(lista);
-	}
+    @GetMapping
+    public ResponseEntity<List<PointEntity>> findUserPoints() {
+        var lista = service.findUser();
+        return ResponseEntity.ok(lista);
+
+    }
+
+
 	
 	@PostMapping
 	public ResponseEntity<PointEntity> save (@RequestBody PointDTO dto) throws Exception {
