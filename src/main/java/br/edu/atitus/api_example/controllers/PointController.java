@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +56,12 @@ public class PointController {
 	public ResponseEntity<String> delete(@PathVariable UUID id) throws Exception {
 		service.deleteById(id);
 		return ResponseEntity.ok("Ponto deletado");
-		
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<PointDTO> update (@PathVariable UUID id, @RequestBody PointDTO dto) throws Exception {
+		service.updateById(id, dto);
+		return ResponseEntity.status(201).body(dto);
 	}
 	
     @ExceptionHandler(Exception.class)

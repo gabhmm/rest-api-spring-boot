@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import br.edu.atitus.api_example.dtos.PointDTO;
 import br.edu.atitus.api_example.entities.PointEntity;
 import br.edu.atitus.api_example.entities.UserEntity;
 import br.edu.atitus.api_example.repositories.PointRepository;
@@ -51,7 +52,27 @@ public class PointService {
 		
 		repository.deleteById(id);
 	}
-
+	
+	@Transactional
+	public void updateById(UUID id, PointDTO updatedPoint) throws Exception{
+		var pointInBD=repository.findById(id).orElseThrow(() -> new Exception("Ponto não localizado"));
+		UserEntity userAuth = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!pointInBD.getUser().getId().equals(userAuth.getId()))
+			throw new Exception("Você não tem permissão para essa ação");
+		
+	    if (updatedPoint.description() != null)
+	        pointInBD.setDescription(updatedPoint.description());
+	    
+	    if (updatedPoint.latitude() >= -90 && updatedPoint.latitude() <= 90)
+	        pointInBD.setLatitude(updatedPoint.latitude());
+	    
+	    if (updatedPoint.longitude() >= -180 && updatedPoint.longitude() <= 180)
+	        pointInBD.setLongitude(updatedPoint.longitude());
+	    
+	    repository.save(pointInBD);
+	    
+	}
+	
     public List<PointEntity> findUser() {
         UserEntity userAuth = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return repository.findByUser(userAuth);
