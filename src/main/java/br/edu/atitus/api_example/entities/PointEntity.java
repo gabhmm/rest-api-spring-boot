@@ -25,10 +25,10 @@ public class PointEntity  {
     @Column(columnDefinition = "decimal(17,14)",nullable = false)
     private double longitude;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime openHour;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime closeHour;
 
     @JoinColumn(name = "iduser")
