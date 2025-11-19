@@ -39,8 +39,10 @@ public class PointService {
 		if (point.getLongitude()<=-180||point.getLongitude()>180)
 			throw new Exception("Latitude inválida");
 		
-		if (point.getOpenHour().isAfter(point.getCloseHour()))
-			throw new Exception("Horário inválido");
+		if (point.getOpenHour()!=null) {
+			if (point.getOpenHour().isAfter(point.getCloseHour()))
+				throw new Exception("Horário inválido");
+		}
 		
 		UserEntity userAuth = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -89,12 +91,13 @@ public class PointService {
 	    }else {
 	        pointInBD.setLongitude(updatedPoint.longitude());
 	    }
-	    
-	    if (updatedPoint.openHour().isAfter(updatedPoint.closeHour())) {
-	    	throw new Exception("Horário inválido");
-	    }else {
-	    	pointInBD.setOpenHour(updatedPoint.openHour());
-	    	pointInBD.setCloseHour(updatedPoint.closeHour());
+	    if (updatedPoint.openHour()!=null) {
+		    if (updatedPoint.openHour().isAfter(updatedPoint.closeHour())) {
+		    	throw new Exception("Horário inválido");
+		    }else {
+		    	pointInBD.setOpenHour(updatedPoint.openHour());
+		    	pointInBD.setCloseHour(updatedPoint.closeHour());
+		    }
 	    }
 	    
 	    repository.save(pointInBD);
